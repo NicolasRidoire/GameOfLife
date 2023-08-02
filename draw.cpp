@@ -14,10 +14,6 @@ void Draw::drawLoop()
 	this->window->display();
 }
 
-void Draw::circleMove(Vector2<float> velocity) {
-	this->circle.move(velocity);
-}
-
 Draw::~Draw() {
 	
 }

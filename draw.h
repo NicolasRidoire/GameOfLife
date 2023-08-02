@@ -6,12 +6,11 @@ using namespace sf;
 class Draw {
 private:
 	RenderWindow* window;
-	CircleShape circle;
 
 public:
+	CircleShape circle;
 	Draw(RenderWindow* window);
 	void drawLoop();
-	void circleMove(Vector2<float> velocity);
 	~Draw();
 };
 
