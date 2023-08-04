@@ -6,16 +6,17 @@
 #include "Pixel.h"
 using namespace sf;
 
-const int column = 800;
-const int row = 600;
-const float coeff = column / row;
+const int column = 1280;
+const int row = 800;
 const float pixSize = 10.f;
+const float coeff = column / row;
 Pixel* screen[(column / 10) * (row / 10)];
 Mutex mutex;
+float xTime = 1;
 
 int WinMain() {
 	// Initialisation
-	RenderWindow window(VideoMode(column, row), "OK");
+	RenderWindow window(VideoMode(column, row), "OK", Style::Titlebar | Style::Close);
 	Font font;
 	font.loadFromFile("C:/Windows/Fonts/ariblk.ttf");
 	Text number;
@@ -170,9 +171,10 @@ int WinMain() {
 				else if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
 					pause = false;
 				}
+				break;
 			}
 		}
-		if (currentTime.getElapsedTime().asMilliseconds() > 500) {
+		if (currentTime.getElapsedTime().asMilliseconds() > 500 * xTime) {
 			currentTime.restart();
 			if (!pause) {
 				iteration++;
