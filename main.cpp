@@ -3,9 +3,7 @@
 #include <vector>
 #include <functional>
 
-#include "draw.h"
 #include "Pixel.h"
-#include "thread.h"
 using namespace sf;
 
 const int column = 800;
@@ -23,6 +21,29 @@ int WinMain() {
 	Text number;
 	number.setFont(font);
 	number.setFillColor(Color::Red);
+	Vector2 pauseSize = { 10.f, 30.f };
+	RectangleShape pauseBar1(pauseSize);
+	RectangleShape pauseBar2(pauseSize);
+	RectangleShape pauseOutline({ 40.f, 40.f });
+	pauseBar1.setPosition({column - 40.f, 10.f});
+	pauseBar2.setPosition({ column - 20.f, 10.f });
+	pauseOutline.setPosition({ column - 45.f, 5.f });
+	pauseBar1.setFillColor(Color::Blue);
+	pauseBar2.setFillColor(Color::Blue);
+	pauseOutline.setFillColor(Color::White);
+	pauseOutline.setOutlineColor(Color::Blue);
+	pauseOutline.setOutlineThickness(3.f);
+	RectangleShape lRect({ 20.f, 60.f });
+	RectangleShape rRect({ 20.f, 60.f });
+	RectangleShape outRect({ 70.f, 80.f });
+	lRect.setFillColor(Color::Blue);
+	rRect.setFillColor(Color::Blue);
+	outRect.setFillColor(Color::White);
+	outRect.setOutlineColor(Color::Blue);
+	outRect.setOutlineThickness(5.f);
+	lRect.setPosition({ column / 2 - 35, row / 2 - 40 });
+	rRect.setPosition({ column / 2 - 5, row / 2 - 40 });
+	outRect.setPosition({ column / 2 - 45, row / 2 - 50 });
 	bool oneTwo = false;
 	bool changeLine = false;
 	for (int i = 0; i < column / 10; i++) {
@@ -91,11 +112,16 @@ int WinMain() {
 			window.draw(screen[i * (row / 10) + j]->square);
 		}
 	}
+	window.draw(pauseBar1);
+	window.draw(pauseBar2);
+	window.draw(pauseOutline);
 	number.setString(std::to_string(iteration));
 	window.draw(number);
 	window.display();
 
 	bool pause = false;
+	Clock currentTime;
+	currentTime.restart();
 
 	while (window.isOpen()) {
 		// Game loop
@@ -113,37 +139,70 @@ int WinMain() {
 						pause = true;
 				}
 				break;
-			}
-		}
-		sleep(milliseconds(250));
-		if (!pause) {
-			iteration++;
-			int closeAlive = 0;
-			for (int i = 0; i < column / 10; i++) {
-				for (int j = 0; j < row / 10; j++) {
-					closeAlive = 0;
-					for (int k = 0; k < 8; k++) {
-						if (screen[i * (row / 10) + j]->close[k] != nullptr && screen[i * (row / 10) + j]->close[k]->isAlive == true)
-							closeAlive++;
+			case Event::MouseMoved:
+				if (event.mouseMove.x > column - 48.f && event.mouseMove.x < column - 2.f && event.mouseMove.y > 2.f && event.mouseMove.y < 48.f) {
+					pauseBar1.setFillColor(Color::Red);
+					pauseBar2.setFillColor(Color::Red);
+					pauseOutline.setOutlineColor(Color::Red);
+				}
+				else {
+					pauseBar1.setFillColor(Color::Blue);
+					pauseBar2.setFillColor(Color::Blue);
+					pauseOutline.setOutlineColor(Color::Blue);
+				}
+				if (pause) {
+					if (event.mouseMove.x > column / 2 - 50 && event.mouseMove.x < column / 2 + 30 && event.mouseMove.y > row / 2 - 55 && event.mouseMove.y < row / 2 + 35) {
+						lRect.setFillColor(Color::Red);
+						rRect.setFillColor(Color::Red);
+						outRect.setOutlineColor(Color::Red);
 					}
-					if (screen[i * (row / 10) + j]->isAlive == false && closeAlive == 3) {
-						screen[i * (row / 10) + j]->nextStatus = true;
-					}
-					else if (screen[i * (row / 10) + j]->isAlive == true && (closeAlive < 2 || closeAlive > 3)) {
-						screen[i * (row / 10) + j]->nextStatus = false;
-					}
-					else if (screen[i * (row / 10) + j]->isAlive == true && (closeAlive > 2 || closeAlive < 3)) {
-						screen[i * (row / 10) + j]->nextStatus = true;
+					else {
+						lRect.setFillColor(Color::Blue);
+						rRect.setFillColor(Color::Blue);
+						outRect.setOutlineColor(Color::Blue);
 					}
 				}
+				break;
+			case Event::MouseButtonReleased:
+				if (event.mouseButton.x > column - 48.f && event.mouseButton.x < column - 2.f && event.mouseButton.y > 2.f && event.mouseButton.y < 48.f) {
+					pause = true;
+				}
+				else if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
+					pause = false;
+				}
 			}
-			for (int i = 0; i < column / 10; i++) {
-				for (int j = 0; j < row / 10; j++) {
-					if (screen[i * (row / 10) + j]->nextStatus != screen[i * (row / 10) + j]->isAlive) {
-						if (screen[i * (row / 10) + j]->nextStatus == false)
-							screen[i * (row / 10) + j]->Dies();
-						else
-							screen[i * (row / 10) + j]->Born();
+		}
+		if (currentTime.getElapsedTime().asMilliseconds() > 500) {
+			currentTime.restart();
+			if (!pause) {
+				iteration++;
+				int closeAlive = 0;
+				for (int i = 0; i < column / 10; i++) {
+					for (int j = 0; j < row / 10; j++) {
+						closeAlive = 0;
+						for (int k = 0; k < 8; k++) {
+							if (screen[i * (row / 10) + j]->close[k] != nullptr && screen[i * (row / 10) + j]->close[k]->isAlive == true)
+								closeAlive++;
+						}
+						if (screen[i * (row / 10) + j]->isAlive == false && closeAlive == 3) {
+							screen[i * (row / 10) + j]->nextStatus = true;
+						}
+						else if (screen[i * (row / 10) + j]->isAlive == true && (closeAlive < 2 || closeAlive > 3)) {
+							screen[i * (row / 10) + j]->nextStatus = false;
+						}
+						else if (screen[i * (row / 10) + j]->isAlive == true && (closeAlive > 2 || closeAlive < 3)) {
+							screen[i * (row / 10) + j]->nextStatus = true;
+						}
+					}
+				}
+				for (int i = 0; i < column / 10; i++) {
+					for (int j = 0; j < row / 10; j++) {
+						if (screen[i * (row / 10) + j]->nextStatus != screen[i * (row / 10) + j]->isAlive) {
+							if (screen[i * (row / 10) + j]->nextStatus == false)
+								screen[i * (row / 10) + j]->Dies();
+							else
+								screen[i * (row / 10) + j]->Born();
+						}
 					}
 				}
 			}
@@ -151,24 +210,18 @@ int WinMain() {
 		window.clear();
 		for (int i = 0; i < column / 10; i++) {
 			for (int j = 0; j < row / 10; j++) {
-				if (screen[i * (row / 10) + j]->nextStatus != screen[i * (row / 10) + j]->isAlive) {
-					if (screen[i * (row / 10) + j]->nextStatus == false)
-						screen[i * (row / 10) + j]->Dies();
-					else
-						screen[i * (row / 10) + j]->Born();
-				}
 				window.draw(screen[i * (row / 10) + j]->square);
 			}
 		}
 		if (pause) {
-			RectangleShape lRect({ 20.f, 60.f });
-			RectangleShape rRect({ 20.f, 60.f });
-			lRect.setFillColor(Color::Blue);
-			rRect.setFillColor(Color::Blue);
-			lRect.move({ column / 2 - 35, row / 2 - 40 });
-			rRect.move({ column / 2 - 5, row / 2 - 40 });
+			window.draw(outRect);
 			window.draw(lRect);
 			window.draw(rRect);
+		}
+		else {
+			window.draw(pauseOutline);
+			window.draw(pauseBar1);
+			window.draw(pauseBar2);
 		}
 		number.setString(std::to_string(iteration));
 		window.draw(number);
