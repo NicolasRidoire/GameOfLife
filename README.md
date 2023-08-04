@@ -1,0 +1,4 @@
+GameOfLife
+
+Keybinds :
+- Escape : pause
