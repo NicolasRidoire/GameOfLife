@@ -236,6 +236,9 @@ int WinMain() {
 					back2Triangle.setFillColor(Color::Magenta);
 				}
 				else {
+					forwardOutline.setOutlineColor(Color::Magenta);
+					for1Triangle.setFillColor(Color::Magenta);
+					for2Triangle.setFillColor(Color::Magenta);
 					backwardOutline.setOutlineColor(Color::Magenta);
 					back1Triangle.setFillColor(Color::Magenta);
 					back2Triangle.setFillColor(Color::Magenta);
