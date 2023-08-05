@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "Pixel.h"
+#include "Button.h"
 using namespace sf;
 
 const int column = 1280;
@@ -140,36 +141,42 @@ int WinMain() {
 						pause = true;
 				}
 				break;
-			case Event::MouseMoved:
-				if (event.mouseMove.x > column - 48.f && event.mouseMove.x < column - 2.f && event.mouseMove.y > 2.f && event.mouseMove.y < 48.f) {
+			case Event::MouseButtonPressed:
+				if (event.mouseButton.x > column - 48.f && event.mouseButton.x < column - 2.f && event.mouseButton.y > 2.f && event.mouseButton.y < 48.f) {
 					pauseBar1.setFillColor(Color::Red);
 					pauseBar2.setFillColor(Color::Red);
 					pauseOutline.setOutlineColor(Color::Red);
 				}
-				else {
-					pauseBar1.setFillColor(Color::Blue);
-					pauseBar2.setFillColor(Color::Blue);
-					pauseOutline.setOutlineColor(Color::Blue);
-				}
 				if (pause) {
-					if (event.mouseMove.x > column / 2 - 50 && event.mouseMove.x < column / 2 + 30 && event.mouseMove.y > row / 2 - 55 && event.mouseMove.y < row / 2 + 35) {
+					if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
 						lRect.setFillColor(Color::Red);
 						rRect.setFillColor(Color::Red);
 						outRect.setOutlineColor(Color::Red);
-					}
-					else {
-						lRect.setFillColor(Color::Blue);
-						rRect.setFillColor(Color::Blue);
-						outRect.setOutlineColor(Color::Blue);
 					}
 				}
 				break;
 			case Event::MouseButtonReleased:
 				if (event.mouseButton.x > column - 48.f && event.mouseButton.x < column - 2.f && event.mouseButton.y > 2.f && event.mouseButton.y < 48.f) {
 					pause = true;
+					pauseBar1.setFillColor(Color::Blue);
+					pauseBar2.setFillColor(Color::Blue);
+					pauseOutline.setOutlineColor(Color::Blue);
 				}
-				else if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
+				else {
+					pauseBar1.setFillColor(Color::Blue);
+					pauseBar2.setFillColor(Color::Blue);
+					pauseOutline.setOutlineColor(Color::Blue);
+				}
+				if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
 					pause = false;
+					lRect.setFillColor(Color::Blue);
+					rRect.setFillColor(Color::Blue);
+					outRect.setOutlineColor(Color::Blue);
+				}
+				else {
+					lRect.setFillColor(Color::Blue);
+					rRect.setFillColor(Color::Blue);
+					outRect.setOutlineColor(Color::Blue);
 				}
 				break;
 			}
