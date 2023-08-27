@@ -17,6 +17,7 @@ int xTime = 1;
 
 int WinMain() {
 	// Initialisation
+	bool menu = true;
 	RenderWindow window(VideoMode(column, row), "OK", Style::Titlebar | Style::Close);
 	Font font;
 	font.loadFromFile("C:/Windows/Fonts/ariblk.ttf");
@@ -132,6 +133,7 @@ int WinMain() {
 	}
 
 	int iteration = 0;
+	/*
 	window.clear();
 	for (int i = 0; i < column / 10; i++) {
 		for (int j = 0; j < row / 10; j++) {
@@ -151,7 +153,7 @@ int WinMain() {
 	speed.setString("x" + std::to_string(xTime));
 	window.draw(speed);
 	window.draw(number);
-	window.display();
+	window.display();*/
 
 	bool pause = false;
 	Clock currentTime;
@@ -166,155 +168,189 @@ int WinMain() {
 				window.close();
 				break;
 			case Event::KeyPressed:
-				if (event.key.code == Keyboard::Escape) {
-					if (pause == true)
-						pause = false;
-					else
-						pause = true;
-				}
-				else if (event.key.code == Keyboard::Left) {
-					if (xTime > 1)
-						xTime /= 2;
-				}
-				else if (event.key.code == Keyboard::Right) {
-					if (xTime < 512)
-						xTime *= 2;
+				if (!menu) {
+					if (event.key.code == Keyboard::Escape) {
+						if (pause == true)
+							pause = false;
+						else
+							pause = true;
+					}
+					else if (event.key.code == Keyboard::Left) {
+						if (xTime > 1)
+							xTime /= 2;
+					}
+					else if (event.key.code == Keyboard::Right) {
+						if (xTime < 512)
+							xTime *= 2;
+					}
 				}
 				break;
 			case Event::MouseButtonPressed:
-				if (pause) {
-					if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
-						lRect.setFillColor(Color::Red);
-						rRect.setFillColor(Color::Red);
-						outRect.setOutlineColor(Color::Red);
+				if (!menu) {
+					if (pause) {
+						if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
+							lRect.setFillColor(Color::Red);
+							rRect.setFillColor(Color::Red);
+							outRect.setOutlineColor(Color::Red);
+						}
 					}
-				}
-				else if (event.mouseButton.x > column - 48.f && event.mouseButton.x < column - 2.f && event.mouseButton.y > 2.f && event.mouseButton.y < 48.f) {
-					pauseBar1.setFillColor(Color::Red);
-					pauseBar2.setFillColor(Color::Red);
-					pauseOutline.setOutlineColor(Color::Red);
-				}
-				else if (event.mouseButton.x > 4.f && event.mouseButton.x < 35.5f && event.mouseButton.y > row - 34.5f && event.mouseButton.y < row - 7.f) {
-					backwardOutline.setOutlineColor(Color::Red);
-					back1Triangle.setFillColor(Color::Red);
-					back2Triangle.setFillColor(Color::Red);
-				}
-				else if (event.mouseButton.x > 38.5f && event.mouseButton.x < 70.f && event.mouseButton.y > row - 34.5f && event.mouseButton.y < row - 7.f) {
-					forwardOutline.setOutlineColor(Color::Red);
-					for1Triangle.setFillColor(Color::Red);
-					for2Triangle.setFillColor(Color::Red);
+					else if (event.mouseButton.x > column - 48.f && event.mouseButton.x < column - 2.f && event.mouseButton.y > 2.f && event.mouseButton.y < 48.f) {
+						pauseBar1.setFillColor(Color::Red);
+						pauseBar2.setFillColor(Color::Red);
+						pauseOutline.setOutlineColor(Color::Red);
+					}
+					else if (event.mouseButton.x > 4.f && event.mouseButton.x < 35.5f && event.mouseButton.y > row - 34.5f && event.mouseButton.y < row - 7.f) {
+						backwardOutline.setOutlineColor(Color::Red);
+						back1Triangle.setFillColor(Color::Red);
+						back2Triangle.setFillColor(Color::Red);
+					}
+					else if (event.mouseButton.x > 38.5f && event.mouseButton.x < 70.f && event.mouseButton.y > row - 34.5f && event.mouseButton.y < row - 7.f) {
+						forwardOutline.setOutlineColor(Color::Red);
+						for1Triangle.setFillColor(Color::Red);
+						for2Triangle.setFillColor(Color::Red);
+					}
 				}
 				break;
 			case Event::MouseButtonReleased:
-				if (event.mouseButton.x > column - 48.f && event.mouseButton.x < column - 2.f && event.mouseButton.y > 2.f && event.mouseButton.y < 48.f) {
-					pause = true;
-					pauseBar1.setFillColor(Color::Blue);
-					pauseBar2.setFillColor(Color::Blue);
-					pauseOutline.setOutlineColor(Color::Blue);
-				}
-				else if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
-					pause = false;
-					lRect.setFillColor(Color::Blue);
-					rRect.setFillColor(Color::Blue);
-					outRect.setOutlineColor(Color::Blue);
-				}
-				else if (event.mouseButton.x > 38.5f && event.mouseButton.x < 70.f && event.mouseButton.y > row - 34.5f && event.mouseButton.y < row - 7.f) {
-					if (xTime < 512) {
-						xTime *= 2;
+				if (!menu) {
+					if (event.mouseButton.x > column - 48.f && event.mouseButton.x < column - 2.f && event.mouseButton.y > 2.f && event.mouseButton.y < 48.f) {
+						pause = true;
+						pauseBar1.setFillColor(Color::Blue);
+						pauseBar2.setFillColor(Color::Blue);
+						pauseOutline.setOutlineColor(Color::Blue);
 					}
-					forwardOutline.setOutlineColor(Color::Magenta);
-					for1Triangle.setFillColor(Color::Magenta);
-					for2Triangle.setFillColor(Color::Magenta);
-				}
+					else if (event.mouseButton.x > column / 2 - 50 && event.mouseButton.x < column / 2 + 30 && event.mouseButton.y > row / 2 - 55 && event.mouseButton.y < row / 2 + 35) {
+						pause = false;
+						lRect.setFillColor(Color::Blue);
+						rRect.setFillColor(Color::Blue);
+						outRect.setOutlineColor(Color::Blue);
+					}
+					else if (event.mouseButton.x > 38.5f && event.mouseButton.x < 70.f && event.mouseButton.y > row - 34.5f && event.mouseButton.y < row - 7.f) {
+						if (xTime < 512) {
+							xTime *= 2;
+						}
+						forwardOutline.setOutlineColor(Color::Magenta);
+						for1Triangle.setFillColor(Color::Magenta);
+						for2Triangle.setFillColor(Color::Magenta);
+					}
 
-				else if (event.mouseButton.x > 4.f && event.mouseButton.x < 35.5f && event.mouseButton.y > row - 34.5f && event.mouseButton.y < row - 7.f) {
-					if (xTime > 1) {
-						xTime /= 2;
+					else if (event.mouseButton.x > 4.f && event.mouseButton.x < 35.5f && event.mouseButton.y > row - 34.5f && event.mouseButton.y < row - 7.f) {
+						if (xTime > 1) {
+							xTime /= 2;
+						}
+						backwardOutline.setOutlineColor(Color::Magenta);
+						back1Triangle.setFillColor(Color::Magenta);
+						back2Triangle.setFillColor(Color::Magenta);
 					}
-					backwardOutline.setOutlineColor(Color::Magenta);
-					back1Triangle.setFillColor(Color::Magenta);
-					back2Triangle.setFillColor(Color::Magenta);
+					else {
+						forwardOutline.setOutlineColor(Color::Magenta);
+						for1Triangle.setFillColor(Color::Magenta);
+						for2Triangle.setFillColor(Color::Magenta);
+						backwardOutline.setOutlineColor(Color::Magenta);
+						back1Triangle.setFillColor(Color::Magenta);
+						back2Triangle.setFillColor(Color::Magenta);
+						pauseBar1.setFillColor(Color::Blue);
+						pauseBar2.setFillColor(Color::Blue);
+						pauseOutline.setOutlineColor(Color::Blue);
+						lRect.setFillColor(Color::Blue);
+						rRect.setFillColor(Color::Blue);
+						outRect.setOutlineColor(Color::Blue);
+					}
 				}
 				else {
-					forwardOutline.setOutlineColor(Color::Magenta);
-					for1Triangle.setFillColor(Color::Magenta);
-					for2Triangle.setFillColor(Color::Magenta);
-					backwardOutline.setOutlineColor(Color::Magenta);
-					back1Triangle.setFillColor(Color::Magenta);
-					back2Triangle.setFillColor(Color::Magenta);
-					pauseBar1.setFillColor(Color::Blue);
-					pauseBar2.setFillColor(Color::Blue);
-					pauseOutline.setOutlineColor(Color::Blue);
-					lRect.setFillColor(Color::Blue);
-					rRect.setFillColor(Color::Blue);
-					outRect.setOutlineColor(Color::Blue);
+					menu = false;
 				}
-
 				break;
 			}
 		}
-		if (currentTime.getElapsedTime().asMilliseconds() > 500 / xTime) {
-			currentTime.restart();
-			if (!pause) {
-				iteration++;
-				int closeAlive = 0;
-				for (int i = 0; i < column / 10; i++) {
-					for (int j = 0; j < row / 10; j++) {
-						closeAlive = 0;
-						for (int k = 0; k < 8; k++) {
-							if (screen[i * (row / 10) + j]->close[k] != nullptr && screen[i * (row / 10) + j]->close[k]->isAlive == true)
-								closeAlive++;
-						}
-						if (screen[i * (row / 10) + j]->isAlive == false && closeAlive == 3) {
-							screen[i * (row / 10) + j]->nextStatus = true;
-						}
-						else if (screen[i * (row / 10) + j]->isAlive == true && (closeAlive < 2 || closeAlive > 3)) {
-							screen[i * (row / 10) + j]->nextStatus = false;
-						}
-						else if (screen[i * (row / 10) + j]->isAlive == true && (closeAlive > 2 || closeAlive < 3)) {
-							screen[i * (row / 10) + j]->nextStatus = true;
+		if (!menu) {
+			if (currentTime.getElapsedTime().asMilliseconds() > 500 / xTime) {
+				currentTime.restart();
+				if (!pause) {
+					iteration++;
+					int closeAlive = 0;
+					for (int i = 0; i < column / 10; i++) {
+						for (int j = 0; j < row / 10; j++) {
+							closeAlive = 0;
+							for (int k = 0; k < 8; k++) {
+								if (screen[i * (row / 10) + j]->close[k] != nullptr && screen[i * (row / 10) + j]->close[k]->isAlive == true)
+									closeAlive++;
+							}
+							if (screen[i * (row / 10) + j]->isAlive == false && closeAlive == 3) {
+								screen[i * (row / 10) + j]->nextStatus = true;
+							}
+							else if (screen[i * (row / 10) + j]->isAlive == true && (closeAlive < 2 || closeAlive > 3)) {
+								screen[i * (row / 10) + j]->nextStatus = false;
+							}
+							else if (screen[i * (row / 10) + j]->isAlive == true && (closeAlive > 2 || closeAlive < 3)) {
+								screen[i * (row / 10) + j]->nextStatus = true;
+							}
 						}
 					}
-				}
-				for (int i = 0; i < column / 10; i++) {
-					for (int j = 0; j < row / 10; j++) {
-						if (screen[i * (row / 10) + j]->nextStatus != screen[i * (row / 10) + j]->isAlive) {
-							if (screen[i * (row / 10) + j]->nextStatus == false)
-								screen[i * (row / 10) + j]->Dies();
-							else
-								screen[i * (row / 10) + j]->Born();
+					for (int i = 0; i < column / 10; i++) {
+						for (int j = 0; j < row / 10; j++) {
+							if (screen[i * (row / 10) + j]->nextStatus != screen[i * (row / 10) + j]->isAlive) {
+								if (screen[i * (row / 10) + j]->nextStatus == false)
+									screen[i * (row / 10) + j]->Dies();
+								else
+									screen[i * (row / 10) + j]->Born();
+							}
 						}
 					}
 				}
 			}
-		}
-		window.clear();
-		for (int i = 0; i < column / 10; i++) {
-			for (int j = 0; j < row / 10; j++) {
-				window.draw(screen[i * (row / 10) + j]->square);
+			window.clear();
+			for (int i = 0; i < column / 10; i++) {
+				for (int j = 0; j < row / 10; j++) {
+					window.draw(screen[i * (row / 10) + j]->square);
+				}
 			}
-		}
-		if (pause) {
-			window.draw(outRect);
-			window.draw(lRect);
-			window.draw(rRect);
+			if (pause) {
+				window.draw(outRect);
+				window.draw(lRect);
+				window.draw(rRect);
+			}
+			else {
+				window.draw(pauseOutline);
+				window.draw(pauseBar1);
+				window.draw(pauseBar2);
+				window.draw(forwardOutline);
+				window.draw(backwardOutline);
+				window.draw(for1Triangle);
+				window.draw(for2Triangle);
+				window.draw(back1Triangle);
+				window.draw(back2Triangle);
+			}
+			number.setString(std::to_string(iteration));
+			window.draw(number);
+			speed.setString("x" + std::to_string(xTime));
+			window.draw(speed);
+			window.display();
 		}
 		else {
-			window.draw(pauseOutline);
-			window.draw(pauseBar1);
-			window.draw(pauseBar2);
-			window.draw(forwardOutline);
-			window.draw(backwardOutline);
-			window.draw(for1Triangle);
-			window.draw(for2Triangle);
-			window.draw(back1Triangle);
-			window.draw(back2Triangle);
+			Text title;
+			title.setFont(font);
+			title.setFillColor(Color::Black);
+			title.setCharacterSize(80);
+			title.setString("Game of life");
+			title.setPosition(column / 2 - 250, row / 3 - 180);
+			RectangleShape playRect({ 400, 100 });
+			playRect.setFillColor(Color::White);
+			playRect.setOutlineColor(Color::Black);
+			playRect.setOutlineThickness(3.f);
+			playRect.setPosition({ column / 2 - 200, row / 2 - 150 });
+			CircleShape playTriangle(40, 3);
+			playTriangle.setPosition({ column / 2 + 40, row / 2 - 140 });
+			playTriangle.setRotation(90);
+			playTriangle.setFillColor(Color::Black);
+
+			window.clear(Color::White);
+			window.draw(playRect);
+			window.draw(playTriangle);
+			window.draw(title);
+			window.display();
+			sleep(milliseconds(500));
 		}
-		number.setString(std::to_string(iteration));
-		window.draw(number);
-		speed.setString("x" + std::to_string(xTime));
-		window.draw(speed);
-		window.display();
 	}
 
 	return 0;
